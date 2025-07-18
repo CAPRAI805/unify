@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<link href="assets/style.css" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Connected Students – Forum des Lycées</title>
+<style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fafafa;
+      color: #333;
+    }
+    header {
+      background: #1d3557;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+    header p {
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .school-link {
+      background: white;
+      padding: 20px;
+      border: 2px solid #1d3557;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      text-decoration: none;
+      color: #1d3557;
+      transition: all 0.3s ease;
+    }
+    .school-link:hover {
+      background: #1d3557;
+      color: white;
+    }
+    section {
+      margin-top: 40px;
+    }
+    form input, form textarea, form select, form button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    form button {
+      background: #1d3557;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.9em;
+      color: #666;
+      margin: 40px 0 20px;
+    }
+  </style>
+</head>
+<body>
+<nav style="background:#111; padding:10px 20px; position:sticky; top:0; z-index:999;">
+<a href="index.html" style="color:white; margin-right:20px; text-decoration:none;">🏠 Accueil</a>
+<a href="pages/histoire.html" style="color:white; text-decoration:none;">📖 Notre Histoire</a>
+</nav>
+<header>
+<img alt="UNIFY Logo" src="logo-unify.jpeg" style="height: 80px; display: block; margin: 0 auto 10px;"/>
+<p style="text-align:center; font-size: 1.1em; margin-top: 5px;">Dress them for success</p>
+<h1>Connected Students</h1>
+<p>Choisis ton lycée et propose tes idées de design</p>
+</header>
+<div class="container">
+<section>
+<h2>📍 Les Lycées de Paris</h2>
+<div class="grid">
+<a class="school-link" href="lyceelouislegrand.html">Lycée Louis-le-Grand</a>
+<a class="school-link" href="lyceehenriiv.html">Lycée Henri-IV</a>
+<a class="school-link" href="lyceecharlemagne.html">Lycée Charlemagne</a>
+<a class="school-link" href="lyceemontaigne.html">Lycée Montaigne</a>
+<a class="school-link" href="lyceevictorhugo.html">Lycée Victor Hugo</a>
+<a class="school-link" href="lyceejansondesailly.html">Lycée Janson-de-Sailly</a>
+<a class="school-link" href="lyceebuffon.html">Lycée Buffon</a>
+<a class="school-link" href="lyceefenelon.html">Lycée Fénelon</a>
+<a class="school-link" href="lyceelamartine.html">Lycée Lamartine</a>
+<a class="school-link" href="lyceeclaudemonet.html">Lycée Claude Monet</a>
+</div>
+</section>
+<section id="upload">
+<h2>🖌️ Propose ton Design</h2>
+<form onsubmit="saveDesign(event)">
+<input id="studentName" placeholder="Nom complet" required="" type="text"/>
+<input id="studentEmail" placeholder="Email scolaire" required="" type="email"/>
+<select id="studentSchool" required="">
+<option value="">Choisis ton lycée</option>
+<option value="lyceelouislegrand">Lycée Louis-le-Grand</option>
+<option value="lyceehenriiv">Lycée Henri-IV</option>
+<option value="lyceecharlemagne">Lycée Charlemagne</option>
+<option value="lyceemontaigne">Lycée Montaigne</option>
+<option value="lyceevictorhugo">Lycée Victor Hugo</option>
+<option value="lyceejansondesailly">Lycée Janson-de-Sailly</option>
+<option value="lyceebuffon">Lycée Buffon</option>
+<option value="lyceefenelon">Lycée Fénelon</option>
+<option value="lyceelamartine">Lycée Lamartine</option>
+<option value="lyceeclaudemonet">Lycée Claude Monet</option>
+</select>
+<input accept="image/*" id="studentImage" required="" type="file"/>
+<button type="submit">Soumettre</button>
+</form>
+<p id="uploadStatus" style="color: green; font-weight: bold;"></p>
+</section>
+</section>
+</div>
+<footer>
+    © 2025 Connected Students – Projet des élèves parisiens
+  </footer>
+<script>
+  function loginUser(event) {
+    event.preventDefault();
+    const email = document.getElementById("loginEmail").value;
+    const pass = document.getElementById("loginPassword").value;
+    const status = document.getElementById("loginStatus");
+    if (email === "eleve@unify.fr" && pass === "unify2025") {
+      localStorage.setItem("loggedIn", "true");
+      status.style.color = "green";
+      status.textContent = "Connexion réussie. Bienvenue !";
+    } else {
+      status.style.color = "red";
+      status.textContent = "Identifiants incorrects.";
+    }
+  }
+</script>
+<script>
+  function saveDesign(event) {
+    event.preventDefault();
+    const name = document.getElementById("studentName").value;
+    const email = document.getElementById("studentEmail").value;
+    const school = document.getElementById("studentSchool").value;
+    const fileInput = document.getElementById("studentImage");
+    const status = document.getElementById("uploadStatus");
+
+    const reader = new FileReader();
+    reader.onload = function() {
+      const imageData = reader.result;
+      const design = { name, email, image: imageData };
+
+      let designs = JSON.parse(localStorage.getItem(school)) || [];
+      designs.push(design);
+      localStorage.setItem(school, JSON.stringify(designs));
+
+      status.textContent = "Design soumis avec succès !";
+    };
+
+    if (fileInput.files.length > 0) {
+      reader.readAsDataURL(fileInput.files[0]);
+    } else {
+      status.style.color = "red";
+      status.textContent = "Aucun fichier sélectionné.";
+    }
+  }
+</script>
+<section id="notre-histoire" style="background:#f6f6f6; padding:40px 20px; font-family:'Georgia', serif;">
+<h2 style="text-align:center; font-size:2em; margin-bottom:20px;">Notre Histoire</h2>
+<div style="max-width:800px; margin:auto; font-size:1.1em; line-height:1.6; color:#333;">
+<p><strong>UNIFY – L’uniforme qui rassemble, réchauffe et représente</strong></p>
+<p>Tout a commencé sur les bancs d’une école parisienne.<br/>
+        On était comme tous les autres : des élèves, avec nos sacs, nos rêves… et nos uniformes tristes, froids et sans âme.</p>
+<p>Chaque matin, en enfilant ces vêtements raides, on se demandait :<br/>
+<em>Pourquoi est-ce qu’on doit tous porter ça ?</em></p>
+<p>Alors, on a décidé de dire stop.<br/>
+        Pas à l’uniforme – mais à l’uniforme moche, inconfortable et sans personnalité.</p>
+<p>C’est comme ça qu’est née <strong>UNIFY</strong> : une marque imaginée par des étudiants, pour les étudiants.</p>
+<p><strong>Notre idée ?</strong><br/>
+        Créer des uniformes qui donnent envie de les porter.<br/>
+        Des vêtements chauds, stylés, agréables, mais surtout porteurs d’identité et de fierté.</p>
+<p>Une tenue qui dit : “Je fais partie de cette école, de cette communauté – et je le montre avec classe.”</p>
+<p>Aujourd’hui, UNIFY, c’est bien plus qu’un simple projet textile.<br/>
+        C’est un mouvement.<br/>
+        Une communauté de jeunes, d’écoles et d’ambassadeurs qui veulent réinventer l’uniforme scolaire, avec du sens et du style.</p>
+<p>Nos pièces sont pensées pour durer, pour représenter et pour rassembler.</p>
+<p><strong>On a commencé avec un sweat.<br/>
+        On continue avec une vision :</strong></p>
+<p style="text-align:center; font-size:1.2em;">👉 Celle d’une génération qui veut se sentir bien, ensemble, et représentée.</p>
+<p style="text-align:center; font-weight:bold; font-size:1.3em;">UNIFY – Représente. Réchauffe. Appartiens.</p>
+</div>
+</section>
+</body>
+</html>

@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+<style>
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 16px;
+    max-width: 280px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  .card img {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  .icon-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin: 5px;
+  }
+  .comments {
+    text-align: left;
+    font-size: 0.9em;
+    margin-top: 10px;
+  }
+  .comments p {
+    margin: 4px 0;
+  }
+  @media (max-width: 600px) {
+    .grid {
+      flex-direction: column;
+      align-items: center;
+    }
+    .card {
+      width: 90%;
+    }
+  }
+</style>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lycée Henri-IV – Projets de Design</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f5f5f5; color: #333; }
+    header { background: #1d3557; color: white; padding: 30px; text-align: center; }
+    .container { max-width: 900px; margin: auto; padding: 20px; background: white; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+    .card { background: #eef; padding: 15px; border-radius: 8px; }
+    .like-btn { background: #1d3557; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    .comment-box { margin-top: 10px; }
+    textarea { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+    footer { text-align: center; margin-top: 40px; padding: 20px; font-size: 0.9em; color: #666; }
+  </style>
+</head>
+<body>
+
+<script>
+  if (!localStorage.getItem("loggedIn")) {
+    window.location.href = "index.html";
+  }
+</script>
+
+  <header>
+<img src="logo-unify.jpeg" alt="UNIFY Logo" style="height: 80px; display: block; margin: 0 auto 10px;" />
+<p style="text-align:center; font-size: 1.1em; margin-top: 5px;">Dress them for success</p>
+    <h1>Lycée Henri-IV</h1>
+    <p>Projets proposés par les élèves</p>
+    <a href="index.html" style="color: #fff; text-decoration: underline;">← Retour à l'accueil</a>
+  </header>
+  <div class="container">
+    <h2>🎨 Gallerie de Designs</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Design A</h3>
+        <p>Un logo moderne avec les initiales du lycée.</p>
+        <button class="like-btn" onclick="like(this)">❤️ J'aime (<span class="count">0</span>)</button>
+        <div class="comment-box">
+          <textarea placeholder="Laisse un commentaire..."></textarea>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Design B</h3>
+        <p>Un t-shirt inspiré des couleurs de Paris.</p>
+        <button class="like-btn" onclick="like(this)">❤️ J'aime (<span class="count">0</span>)</button>
+        <div class="comment-box">
+          <textarea placeholder="Laisse un commentaire..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    © 2025 Connected Students – Lycée Henri-IV
+  </footer>
+  <script>
+    function like(btn) {
+      const span = btn.querySelector('.count');
+      let count = parseInt(span.textContent);
+      span.textContent = count + 1;
+    }
+  </script>
+
+<script>
+  const schoolKey = location.pathname.split('/').pop().replace('.html', '');
+  const gallery = document.querySelector(".grid");
+  const loggedEmail = localStorage.getItem("userEmail");
+
+  const storedDesigns = JSON.parse(localStorage.getItem(schoolKey) || "[]");
+  for (let i = 0; i < storedDesigns.length; i++) {
+    const design = storedDesigns[i];
+    const designId = schoolKey + "_design_" + i;
+
+    let likes = parseInt(localStorage.getItem(designId + "_likes") || "0");
+    let comments = JSON.parse(localStorage.getItem(designId + "_comments") || "[]");
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <h3><i class="fa fa-user"></i> ${design.name}</h3>
+      <img src="${design.image}" alt="design de ${design.name}" />
+      <p><i class="fa fa-envelope"></i> ${design.email}</p>
+      <button class="icon-btn" onclick="likeDesign('${designId}', this)">
+        ❤️ <span>${likes}</span>
+      </button>
+      <div class="comments">
+        ${comments.map(c => `<p><strong>${c.author}</strong>: ${c.text}</p>`).join("")}
+        <input type="text" placeholder="Ton nom" id="${designId}_author" style="width:40%">
+        <input type="text" placeholder="Commentaire" id="${designId}_text" style="width:50%">
+        <button onclick="commentDesign('${designId}')">💬</button>
+      </div>
+      ${design.email === loggedEmail ? `<button onclick="deleteDesign(${i})">🗑️ Supprimer mon design</button>` : ""}
+    `;
+    gallery.appendChild(card);
+  }
+
+  function likeDesign(id, btn) {
+    let count = parseInt(localStorage.getItem(id + "_likes") || "0") + 1;
+    localStorage.setItem(id + "_likes", count);
+    btn.querySelector("span").textContent = count;
+  }
+
+  function commentDesign(id) {
+    const author = document.getElementById(id + "_author").value;
+    const text = document.getElementById(id + "_text").value;
+    if (!author || !text) return;
+    let comments = JSON.parse(localStorage.getItem(id + "_comments") || "[]");
+    comments.push({ author, text });
+    localStorage.setItem(id + "_comments", JSON.stringify(comments));
+    location.reload();
+  }
+
+  function deleteDesign(index) {
+    let designs = JSON.parse(localStorage.getItem(schoolKey) || "[]");
+    designs.splice(index, 1);
+    localStorage.setItem(schoolKey, JSON.stringify(designs));
+    location.reload();
+  }
+</script>
+
+</body>
+</html>
